@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { AdditionalInfo } from './additional-info.entity';
 
 @Entity()
 export class FormSubmission {
@@ -19,9 +26,25 @@ export class FormSubmission {
   @Column()
   companyName: string;
 
+  @Column({ nullable: true })
+  tradeLicenseUrl: string;
+
+  @Column()
+  W9UploadUrl: string;
+
+  @Column()
+  certificateOfInsuranceUrl: string;
+
+  @Column({ nullable: true })
+  vendorServices: string;
+
   @Column('simple-array')
   serviceAreas: string[];
 
   @Column('simple-array')
   providedServices: string[];
+
+  @OneToOne(() => AdditionalInfo, { cascade: true })
+  @JoinColumn()
+  additionalInfo: AdditionalInfo;
 }
