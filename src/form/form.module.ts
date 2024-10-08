@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FormSubmission } from './submission.entity';
+import { FormSubmission } from './form.entity';
 import { FormService } from './form.service';
 import { FormController } from './form.controller';
 import { EmailService } from 'src/email/email.service';

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { FormSubmission } from 'src/form/submission.entity';
+import { FormSubmission } from 'src/form/form.entity';
 
 @Injectable()
 export class EmailService {
