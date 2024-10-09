@@ -7,6 +7,7 @@ import {
   IsNotEmpty,
   isNotEmpty,
 } from 'class-validator';
+import { Express } from 'express';
 
 export class FormSubmissionDto {
   @IsEmail()
@@ -25,13 +26,13 @@ export class FormSubmissionDto {
   companyName: string;
 
   @IsNotEmpty()
-  w9Upload: Express.Multer.File;
+  w9UploadFile: Express.Multer.File;
 
   @IsOptional()
-  tradeLicense: Express.Multer.File;
+  tradeLicenseFile?: Express.Multer.File;
 
   @IsNotEmpty()
-  certificateOfInsurance: Express.Multer.File;
+  certificateOfInsuranceFile: Express.Multer.File;
 
   @IsArray()
   serviceAreas: string[];

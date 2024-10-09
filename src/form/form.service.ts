@@ -19,29 +19,34 @@ export class FormService {
     private cloudinaryService: CloudinaryService,
   ) {}
 
-  async uploadFile(
-    file: Express.Multer.File,
-    fieldName: string,
-  ): Promise<string> {
-    return this.cloudinaryService.uploadFile(file);
-  }
-  async submitForm(formSubmissionDto: FormSubmissionDto) {
+  async submitForm(
+    formSubmissionDto: FormSubmissionDto,
+    w9_file: Express.Multer.File,
+    license_file: Express.Multer.File,
+    insurance_file: Express.Multer.File,
+  ) {
     const formSubmission = new FormSubmission();
     Object.assign(formSubmission, formSubmissionDto);
 
-    //upload files
-    formSubmission.W9UploadUrl = await this.uploadFile(
-      formSubmissionDto.w9Upload,
-      'w9Upload',
-    );
-    formSubmission.tradeLicenseUrl = await this.uploadFile(
-      formSubmissionDto.tradeLicense,
-      'tradeLicense',
-    );
-    formSubmission.certificateOfInsuranceUrl = await this.uploadFile(
-      formSubmissionDto.certificateOfInsurance,
-      'certificateOfInsurance',
-    );
+    let w9Url: string;
+    let licenseUrl: string;
+    let insuranceUrl: string;
+
+    if (w9_file) {
+      w9Url = await this.cloudinaryService.uploadFile(w9_file);
+    }
+
+    if (license_file) {
+      licenseUrl = await this.cloudinaryService.uploadFile(license_file);
+    }
+
+    if (insurance_file) {
+      insuranceUrl = await this.cloudinaryService.uploadFile(insurance_file);
+    }
+
+    formSubmission.W9UploadUrl = w9Url;
+    formSubmission.tradeLicenseUrl = licenseUrl;
+    formSubmission.certificateOfInsuranceUrl = insuranceUrl;
     //create and associate additional info
     const additionalInfo = new AdditionalInfo();
     Object.assign(additionalInfo, {

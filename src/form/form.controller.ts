@@ -16,24 +16,28 @@ export class FormController {
   @Post('submit')
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'w9Upload', maxCount: 1 },
-      { name: 'tradeLicense', maxCount: 1 },
-      { name: 'certificateOfInsurance', maxCount: 1 },
+      { name: 'w9UploadFile', maxCount: 1 },
+      { name: 'tradeLicenseFile', maxCount: 1 },
+      { name: 'certificateOfInsuranceFile', maxCount: 1 },
     ]),
   )
   async submitForm(
+    @Body() formSubmissionDto: FormSubmissionDto,
     @UploadedFiles()
     files: {
-      w9Upload: Express.Multer.File[];
-      tradeLicense?: Express.Multer.File[];
-      certificateOfInsurance: Express.Multer.File[];
+      w9UploadFile: Express.Multer.File[];
+      tradeLicenseFile?: Express.Multer.File[];
+      certificateOfInsuranceFile: Express.Multer.File[];
     },
-    @Body() formSubmissionDto: FormSubmissionDto,
   ) {
-    //assign uploadedfiles to the dto
-    formSubmissionDto.w9Upload = files.w9Upload[0];
-    formSubmissionDto.tradeLicense = files.tradeLicense[0];
-    formSubmissionDto.certificateOfInsurance = files.certificateOfInsurance[0];
-    return await this.formSubmissionsService.submitForm(formSubmissionDto);
+    const w9File = files.w9UploadFile?.[0];
+    const licenseFile = files.tradeLicenseFile?.[0];
+    const insuranceFile = files.certificateOfInsuranceFile?.[0];
+    return await this.formSubmissionsService.submitForm(
+      formSubmissionDto,
+      w9File,
+      licenseFile,
+      insuranceFile,
+    );
   }
 }
