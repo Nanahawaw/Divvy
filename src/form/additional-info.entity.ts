@@ -19,9 +19,6 @@ export class AdditionalInfo {
   schedulingContactName: string;
 
   @Column()
-  schedulingContactTitle: string;
-
-  @Column()
   schedulingContactEmail: string;
 
   @Column()

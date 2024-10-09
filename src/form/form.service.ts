@@ -26,70 +26,77 @@ export class FormService {
     license_file: Express.Multer.File,
     insurance_file: Express.Multer.File,
   ) {
-    this.logger.log(`Submitting form with files: 
-      W9: ${w9_file?.originalname}, 
-      License: ${license_file?.originalname}, 
-      Insurance: ${insurance_file?.originalname}`);
-    const formSubmission = new FormSubmission();
-    Object.assign(formSubmission, formSubmissionDto);
+    try {
+      this.logger.log(`Submitting form with files: 
+        W9: ${w9_file?.originalname}, 
+        License: ${license_file?.originalname}, 
+        Insurance: ${insurance_file?.originalname}`);
+      const formSubmission = new FormSubmission();
+      Object.assign(formSubmission, formSubmissionDto);
 
-    let w9Url: string;
-    let licenseUrl: string;
-    let insuranceUrl: string;
+      let w9Url: string;
+      let licenseUrl: string;
+      let insuranceUrl: string;
 
-    if (w9_file) {
-      try {
-        w9Url = await this.cloudinaryService.uploadFile(w9_file);
-        this.logger.log(`W9 file uploaded: ${w9Url}`);
-      } catch (error) {
-        this.logger.error(`Error uploading W9 file: ${error.message}`);
-        throw new Error(`Failed to upload W9 file: ${error.message}`);
+      if (w9_file) {
+        try {
+          w9Url = await this.cloudinaryService.uploadFile(w9_file);
+          this.logger.log(`W9 file uploaded: ${w9Url}`);
+        } catch (error) {
+          this.logger.error(`Error uploading W9 file: ${error.message}`);
+          throw new Error(`Failed to upload W9 file: ${error.message}`);
+        }
+      } else {
+        this.logger.error('W9 file is missing or empty');
+        throw new Error('W9 file is required');
       }
-    } else {
-      this.logger.error('W9 file is missing or empty');
-      throw new Error('W9 file is required');
-    }
 
-    if (license_file) {
-      licenseUrl = await this.cloudinaryService.uploadFile(license_file);
-    }
+      if (license_file) {
+        licenseUrl = await this.cloudinaryService.uploadFile(license_file);
+      }
 
-    if (insurance_file) {
-      insuranceUrl = await this.cloudinaryService.uploadFile(insurance_file);
-    }
+      if (insurance_file) {
+        insuranceUrl = await this.cloudinaryService.uploadFile(insurance_file);
+      }
 
-    formSubmission.W9UploadUrl = w9Url;
-    formSubmission.tradeLicenseUrl = licenseUrl;
-    formSubmission.certificateOfInsuranceUrl = insuranceUrl;
-    //create and associate additional info
-    const additionalInfo = new AdditionalInfo();
-    Object.assign(additionalInfo, {
-      schedulingCommunicationPreferences:
-        formSubmissionDto.schedulingCommunicationPreferences,
-      schedulingContactName: formSubmissionDto.schedulingContactName,
-      schedulingContactTitle: formSubmissionDto.schedulingContactTitle,
-      schedulingContactEmail: formSubmissionDto.schedulingContactEmail,
-      schedulingContactPhone: formSubmissionDto.schedulingContactPhone,
-      closeOnBankHoliday: formSubmissionDto.closeOnBankHoliday,
-      appointmentStartTime: formSubmissionDto.appointmentStartTime,
-      appointmentEndTime: formSubmissionDto.appointmentEndTime,
-      appointmentStartTimeSaturday:
-        formSubmissionDto.appointmentStartTimeSaturday,
-      appointmentEndTimeSaturday: formSubmissionDto.appointmentEndTimeSaturday,
-      appointmentStartTimeSunday: formSubmissionDto.appointmentStartTimeSunday,
-      appointmentEndTimeSunday: formSubmissionDto.appointmentEndTimeSunday,
-      weeklyCapacityJob: formSubmissionDto.weeklyCapacityJob,
-      weeklyCapacityAccount: formSubmissionDto.weeklyCapacityAccount,
-      w2Employees: formSubmissionDto.w2Employees,
-      totalEmployees: formSubmissionDto.totalEmployees,
-      thirdPartyWorkManagement: formSubmissionDto.thirdPartyWorkManagement,
-      paymentTermsAgreement: formSubmissionDto.paymentTermsAgreement,
-      occupiedMaintenanceInterest:
-        formSubmissionDto.occupiedMaintenanceInterest,
-    });
-    formSubmission.additionalInfo = additionalInfo;
-    const savedSubmission =
-      await this.formSubmissionRepository.save(formSubmission);
-    return savedSubmission;
+      formSubmission.W9UploadUrl = w9Url;
+      formSubmission.tradeLicenseUrl = licenseUrl;
+      formSubmission.certificateOfInsuranceUrl = insuranceUrl;
+
+      //create and associate additional info
+      const additionalInfo = new AdditionalInfo();
+      Object.assign(additionalInfo, {
+        schedulingCommunicationPreferences:
+          formSubmissionDto.schedulingCommunicationPreferences,
+        schedulingContactName: formSubmissionDto.schedulingContactName,
+        schedulingContactEmail: formSubmissionDto.schedulingContactEmail,
+        schedulingContactPhone: formSubmissionDto.schedulingContactPhone,
+        closeOnBankHoliday: formSubmissionDto.closeOnBankHoliday,
+        appointmentStartTime: formSubmissionDto.appointmentStartTime,
+        appointmentEndTime: formSubmissionDto.appointmentEndTime,
+        appointmentStartTimeSaturday:
+          formSubmissionDto.appointmentStartTimeSaturday,
+        appointmentEndTimeSaturday:
+          formSubmissionDto.appointmentEndTimeSaturday,
+        appointmentStartTimeSunday:
+          formSubmissionDto.appointmentStartTimeSunday,
+        appointmentEndTimeSunday: formSubmissionDto.appointmentEndTimeSunday,
+        weeklyCapacityJob: formSubmissionDto.weeklyCapacityJob,
+        weeklyCapacityAccount: formSubmissionDto.weeklyCapacityAccount,
+        w2Employees: formSubmissionDto.w2Employees,
+        totalEmployees: formSubmissionDto.totalEmployees,
+        thirdPartyWorkManagement: formSubmissionDto.thirdPartyWorkManagement,
+        paymentTermsAgreement: formSubmissionDto.paymentTermsAgreement,
+        occupiedMaintenanceInterest:
+          formSubmissionDto.occupiedMaintenanceInterest,
+      });
+      formSubmission.additionalInfo = additionalInfo;
+      const savedSubmission =
+        await this.formSubmissionRepository.save(formSubmission);
+      return savedSubmission;
+    } catch (error) {
+      this.logger.error(`Error in submitForm: ${error.message}`);
+      return { error: error.message };
+    }
   }
 }

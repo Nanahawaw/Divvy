@@ -55,10 +55,6 @@ export class FormSubmissionDto {
 
   @IsString()
   @IsNotEmpty()
-  schedulingContactTitle: string;
-
-  @IsString()
-  @IsNotEmpty()
   schedulingContactEmail: string;
 
   @IsString()
