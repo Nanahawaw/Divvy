@@ -5,6 +5,7 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use('/uploads', express.static('uploads'));
-  await app.listen(3000);
+  // Listen on all interfaces
+  await app.listen(process.env.PORT || 3000, '0.0.0.0');
 }
 bootstrap();
