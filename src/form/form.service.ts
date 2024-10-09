@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -10,6 +10,7 @@ import { AdditionalInfo } from './additional-info.entity';
 
 @Injectable()
 export class FormService {
+  private readonly logger = new Logger(FormService.name);
   constructor(
     @InjectRepository(FormSubmission)
     private formSubmissionRepository: Repository<FormSubmission>,
@@ -25,6 +26,10 @@ export class FormService {
     license_file: Express.Multer.File,
     insurance_file: Express.Multer.File,
   ) {
+    this.logger.log(`Submitting form with files: 
+      W9: ${w9_file?.originalname}, 
+      License: ${license_file?.originalname}, 
+      Insurance: ${insurance_file?.originalname}`);
     const formSubmission = new FormSubmission();
     Object.assign(formSubmission, formSubmissionDto);
 
@@ -33,7 +38,16 @@ export class FormService {
     let insuranceUrl: string;
 
     if (w9_file) {
-      w9Url = await this.cloudinaryService.uploadFile(w9_file);
+      try {
+        w9Url = await this.cloudinaryService.uploadFile(w9_file);
+        this.logger.log(`W9 file uploaded: ${w9Url}`);
+      } catch (error) {
+        this.logger.error(`Error uploading W9 file: ${error.message}`);
+        throw new Error(`Failed to upload W9 file: ${error.message}`);
+      }
+    } else {
+      this.logger.error('W9 file is missing or empty');
+      throw new Error('W9 file is required');
     }
 
     if (license_file) {
