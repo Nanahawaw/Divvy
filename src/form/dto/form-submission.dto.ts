@@ -6,6 +6,8 @@ import {
   IsOptional,
   IsNotEmpty,
   isNotEmpty,
+  IsNumber,
+  IsBoolean,
 } from 'class-validator';
 import { Express } from 'express';
 
@@ -44,6 +46,9 @@ export class FormSubmissionDto {
   @IsNotEmpty()
   schedulingCommunicationPreferences: string;
 
+  @IsOptional()
+  vendorServices: string[];
+
   @IsString()
   @IsNotEmpty()
   schedulingContactName: string;
@@ -59,6 +64,48 @@ export class FormSubmissionDto {
   @IsString()
   @IsNotEmpty()
   schedulingContactPhone: string;
+
+  @IsString()
+  closeOnBankHoliday: string;
+
+  @IsString()
+  appointmentStartTime: string;
+
+  @IsString()
+  appointmentEndTime: string;
+
+  @IsOptional()
+  appointmentStartTimeSaturday?: string;
+
+  @IsOptional()
+  appointmentEndTimeSaturday?: string;
+
+  @IsOptional()
+  appointmentStartTimeSunday?: string;
+
+  @IsOptional()
+  appointmentEndTimeSunday?: string;
+
+  @IsNumber()
+  weeklyCapacityJob: number;
+
+  @IsNumber()
+  weeklyCapacityAccount: number;
+
+  @IsString()
+  w2Employees: string;
+
+  @IsNumber()
+  totalEmployees: number;
+
+  @IsString()
+  thirdPartyWorkManagement: string;
+
+  @IsString()
+  paymentTermsAgreement: string;
+
+  @IsString()
+  occupiedMaintenanceInterest: string;
 
   // Add other fields and validations as needed
 }

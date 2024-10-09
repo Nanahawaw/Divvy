@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { AdditionalInfo } from './additional-info.entity';
 
@@ -43,6 +45,12 @@ export class FormSubmission {
 
   @Column('simple-array')
   providedServices: string[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToOne(() => AdditionalInfo, { cascade: true })
   @JoinColumn()

@@ -70,6 +70,22 @@ export class FormService {
       schedulingContactTitle: formSubmissionDto.schedulingContactTitle,
       schedulingContactEmail: formSubmissionDto.schedulingContactEmail,
       schedulingContactPhone: formSubmissionDto.schedulingContactPhone,
+      closeOnBankHoliday: formSubmissionDto.closeOnBankHoliday,
+      appointmentStartTime: formSubmissionDto.appointmentStartTime,
+      appointmentEndTime: formSubmissionDto.appointmentEndTime,
+      appointmentStartTimeSaturday:
+        formSubmissionDto.appointmentStartTimeSaturday,
+      appointmentEndTimeSaturday: formSubmissionDto.appointmentEndTimeSaturday,
+      appointmentStartTimeSunday: formSubmissionDto.appointmentStartTimeSunday,
+      appointmentEndTimeSunday: formSubmissionDto.appointmentEndTimeSunday,
+      weeklyCapacityJob: formSubmissionDto.weeklyCapacityJob,
+      weeklyCapacityAccount: formSubmissionDto.weeklyCapacityAccount,
+      w2Employees: formSubmissionDto.w2Employees,
+      totalEmployees: formSubmissionDto.totalEmployees,
+      thirdPartyWorkManagement: formSubmissionDto.thirdPartyWorkManagement,
+      paymentTermsAgreement: formSubmissionDto.paymentTermsAgreement,
+      occupiedMaintenanceInterest:
+        formSubmissionDto.occupiedMaintenanceInterest,
     });
     formSubmission.additionalInfo = additionalInfo;
     const savedSubmission =
