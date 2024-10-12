@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { AdminRole } from 'utils/enum';
+import { AdminRole } from 'src/utils/enum';
 
 @Entity()
 export class Admin {
