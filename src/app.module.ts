@@ -8,6 +8,7 @@ import { EmailService } from './email/email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { CloudinaryService } from './cloudinary/cloudinary.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
       inject: [ConfigService],
     }),
     CloudinaryModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService, CloudinaryService],
